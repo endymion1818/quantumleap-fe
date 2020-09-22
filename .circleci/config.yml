@@ -1,0 +1,16 @@
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: cypress/base:12
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - run: yarn install --frozen-lockfile
+
+      # Run tests
+      - run: yarn build
+      - run: yarn test
+      - run: yarn test:e2e:ci
