@@ -23,6 +23,22 @@ exports.createPages = ({ graphql, actions }) => {
             }
           }
         }
+        webinyHeadlessCms {
+          listEpisodes {
+            data {
+              id
+              slug
+            }
+          }
+        }
+        webinyHeadlessCms {
+          listPages {
+            data {
+              id
+              slug
+            }
+          }
+        }
       }
     `
   ).then((result) => {
@@ -41,7 +57,37 @@ exports.createPages = ({ graphql, actions }) => {
       const previous = index === posts.length - 1 ? null : posts[index + 1].node
       const next = index === 0 ? null : posts[index - 1].node
       createPage({
-        path: post.slug,
+        path: `/post/${post.slug}`,
+        component: blogPostTemplate,
+        context: {
+          slug: post.slug,
+          previous,
+          next,
+        },
+      })
+    })
+    const episodes = result.data.webinyHeadlessCms.listEpisodes.data
+
+    episodes.forEach((post, index) => {
+      const previous = index === episodes.length - 1 ? null : episodes[index + 1].node
+      const next = index === 0 ? null : episodes[index - 1].node
+      createPage({
+        path: `/episode/${post.slug}`,
+        component: blogPostTemplate,
+        context: {
+          slug: post.slug,
+          previous,
+          next,
+        },
+      })
+    })
+    const pages = result.data.webinyHeadlessCms.listPages.data
+
+    pages.forEach((post, index) => {
+      const previous = index === pages.length - 1 ? null : pages[index + 1].node
+      const next = index === 0 ? null : pages[index - 1].node
+      createPage({
+        path: `/${post.slug}`,
         component: blogPostTemplate,
         context: {
           slug: post.slug,
@@ -53,9 +99,9 @@ exports.createPages = ({ graphql, actions }) => {
     // archive pages
     paginate({
       createPage,
-      items: posts,
+      items: pages,
       itemsPerPage: 10,
-      pathPrefix: '/post',
+      pathPrefix: '/pages/',
       component: archiveTemplate,
     })
     // taxonomy pages

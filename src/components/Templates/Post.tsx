@@ -56,14 +56,7 @@ interface IPostTemplateProps {
 }
 
 const PostTemplate: FC<IPostTemplateProps> = ({ data }) => {
-  // const { html } = data.markdownRemark
-  // const { title } = data.markdownRemark.frontmatter
-  // const { description } = data.markdownRemark.frontmatter
-  // const { type } = data.markdownRemark.frontmatter
-  // const { date } = data.markdownRemark.frontmatter
-  // const { featuredImage } = data.markdownRemark.frontmatter
-  // const { featuredImageAlt } = data.markdownRemark.frontmatter
-  // const { categories } = data.markdownRemark.frontmatter
+  const { title, description } = data.webinyHeadlessCms.getPost.data
   return (
     <Entry pageTitle={title} pageDescription={description}>
       <Wrapper>
@@ -71,11 +64,11 @@ const PostTemplate: FC<IPostTemplateProps> = ({ data }) => {
           <article className="h-entry">
             <header>
               <h1>{title}</h1>
-              {featuredImage && (
+              {/* {featuredImage && (
                 <Img fluid={featuredImage.childImageSharp.fluid} alt={featuredImageAlt} />
-              )}
+              )} */}
             </header>
-            <section dangerouslySetInnerHTML={{ __html: html }} />
+            {/* <section dangerouslySetInnerHTML={{ __html: html }} />
             {type !== 'page' && (
               <footer>
                 <time>Published on: {date}</time>
@@ -94,7 +87,7 @@ const PostTemplate: FC<IPostTemplateProps> = ({ data }) => {
                   </>
                 ) : null}
               </footer>
-            )}
+            )} */}
           </article>
         </Container>
       </Wrapper>
@@ -105,13 +98,13 @@ const PostTemplate: FC<IPostTemplateProps> = ({ data }) => {
 export default PostTemplate
 
 export const query = graphql`
-  query BlogPostQuery($id: String!) {
+  query BlogPostQuery($slug: String!) {
     webinyHeadlessCms {
-      getPost(where: { id: $id }) {
+      getPost(where: { slug: $slug }) {
         data {
           title
           slug
-          body
+          description
           createdOn
         }
       }
