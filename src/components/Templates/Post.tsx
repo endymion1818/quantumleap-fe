@@ -56,14 +56,14 @@ interface IPostTemplateProps {
 }
 
 const PostTemplate: FC<IPostTemplateProps> = ({ data }) => {
-  const { html } = data.markdownRemark
-  const { title } = data.markdownRemark.frontmatter
-  const { description } = data.markdownRemark.frontmatter
-  const { type } = data.markdownRemark.frontmatter
-  const { date } = data.markdownRemark.frontmatter
-  const { featuredImage } = data.markdownRemark.frontmatter
-  const { featuredImageAlt } = data.markdownRemark.frontmatter
-  const { categories } = data.markdownRemark.frontmatter
+  // const { html } = data.markdownRemark
+  // const { title } = data.markdownRemark.frontmatter
+  // const { description } = data.markdownRemark.frontmatter
+  // const { type } = data.markdownRemark.frontmatter
+  // const { date } = data.markdownRemark.frontmatter
+  // const { featuredImage } = data.markdownRemark.frontmatter
+  // const { featuredImageAlt } = data.markdownRemark.frontmatter
+  // const { categories } = data.markdownRemark.frontmatter
   return (
     <Entry pageTitle={title} pageDescription={description}>
       <Wrapper>
@@ -105,22 +105,14 @@ const PostTemplate: FC<IPostTemplateProps> = ({ data }) => {
 export default PostTemplate
 
 export const query = graphql`
-  query BlogPostQuery($slug: String!) {
-    markdownRemark(fields: { slug: { eq: $slug } }) {
-      html
-      frontmatter {
-        title
-        categories
-        type
-        description
-        date(formatString: "DD MMMM, YYYY")
-        featuredImage {
-          publicURL
-          childImageSharp {
-            fluid(maxWidth: 1240) {
-              ...GatsbyImageSharpFluid
-            }
-          }
+  query BlogPostQuery($id: String!) {
+    webinyHeadlessCms {
+      getPost(where: { id: $id }) {
+        data {
+          title
+          slug
+          body
+          createdOn
         }
       }
     }

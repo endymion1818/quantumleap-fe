@@ -1,6 +1,7 @@
 const path = require(`path`)
 const _ = require(`lodash`)
 const { paginate } = require(`gatsby-awesome-pagination`)
+// const { useRichTextSerialiser } = require(webiny-richtext-serializer')
 
 const { createFilePath } = require(`gatsby-source-filesystem`)
 
@@ -14,37 +15,36 @@ exports.createPages = ({ graphql, actions }) => {
   return graphql(
     `
       {
-        allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }, limit: 1000) {
-          edges {
-            node {
-              fields {
-                slug
-              }
-              frontmatter {
-                title
-                categories
-              }
+        webinyHeadlessCms {
+          listPosts {
+            data {
+              id
+              slug
             }
           }
         }
       }
     `
-  ).then(result => {
+  ).then((result) => {
     if (result.errors) {
       throw result.errors
     }
+    // const stuff = [
+    //   ...result.data.webinyHeadlessCms.listPosts.data,
+    //   ...result.data.webinyHeadlessCms.listEpisodes.data,
+    //   ...result.data.webinyHeadlessCms.listPages.data,
+    // ]
 
-    // Create blog posts pages.
-    const posts = result.data.allMarkdownRemark.edges
+    const posts = result.data.webinyHeadlessCms.listPosts.data
 
     posts.forEach((post, index) => {
       const previous = index === posts.length - 1 ? null : posts[index + 1].node
       const next = index === 0 ? null : posts[index - 1].node
       createPage({
-        path: post.node.fields.slug,
+        path: post.slug,
         component: blogPostTemplate,
         context: {
-          slug: post.node.fields.slug,
+          slug: post.slug,
           previous,
           next,
         },
@@ -59,23 +59,23 @@ exports.createPages = ({ graphql, actions }) => {
       component: archiveTemplate,
     })
     // taxonomy pages
-    let categories = []
-    _.each(posts, edge => {
-      if (_.get(edge, `node.frontmatter.categories`)) {
-        categories = categories.concat(edge.node.frontmatter.categories)
-      }
-    })
-    categories = _.uniq(categories)
+    // let categories = []
+    // _.each(posts, (edge) => {
+    //   if (_.get(edge, `node.frontmatter.categories`)) {
+    //     categories = categories.concat(posts.)
+    //   }
+    // })
+    // categories = _.uniq(categories)
 
-    categories.forEach(category => {
-      createPage({
-        path: `/categories/${_.kebabCase(category)}/`,
-        component: categoryTemplate,
-        context: {
-          category,
-        },
-      })
-    })
+    // categories.forEach((category) => {
+    //   createPage({
+    //     path: `/categories/${_.kebabCase(category)}/`,
+    //     component: categoryTemplate,
+    //     context: {
+    //       category,
+    //     },
+    //   })
+    // })
 
     return null
   })
@@ -83,13 +83,14 @@ exports.createPages = ({ graphql, actions }) => {
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
+  // console.log(node)
 
-  if (node.internal.type === `MarkdownRemark`) {
-    const slug = createFilePath({ node, getNode, basePath: `pages` })
-    createNodeField({
-      name: `slug`,
-      node,
-      value: slug,
-    })
-  }
+  // if (node.internal.type === `MarkdownRemark`) {
+  //   const slug = createFilePath({ node, getNode, basePath: `pages` })
+  //   createNodeField({
+  //     name: `slug`,
+  //     node,
+  //     value: slug,
+  //   })
+  // }
 }

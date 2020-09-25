@@ -9,45 +9,39 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-typescript`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `src`,
-        path: `${__dirname}/src/`,
-      },
-    },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-styled-components`,
-    `gatsby-transformer-remark`,
     `gatsby-plugin-twitter`,
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-offline`,
     `gatsby-transformer-json`,
     `gatsby-plugin-eslint`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `post`,
-        path: `${__dirname}/src/pages/post`,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `page`,
-        path: `${__dirname}/src/pages/`,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `image`,
-        path: `${__dirname}/src/assets/`,
-      },
-    },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     name: `page`,
+    //     path: `${__dirname}/src/pages/`,
+    //   },
+    // },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     name: `image`,
+    //     path: `${__dirname}/src/assets/`,
+    //   },
+    // },
     `gatsby-transformer-javascript-frontmatter`,
-    `gatsby-plugin-sharp`,
-    `gatsby-transformer-sharp`,
+    {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        typeName: 'someTypeName',
+        fieldName: 'webinyHeadlessCms',
+        url: 'https://d3gz2ruo2cbm8o.cloudfront.net/cms/read/production/cms/read/production',
+        headers: {
+          authorization: '5159873db3fcc0339dfe38a717a8a3fe6b93e3309351ded5',
+        },
+      },
+    },
     `gatsby-plugin-webpack-size`,
     {
       resolve: `gatsby-plugin-react-svg`,
@@ -69,13 +63,6 @@ module.exports = {
         icon: `src/assets/icon.png`,
       },
     },
-    `gatsby-remark-copy-linked-files`,
-    {
-      resolve: `gatsby-remark-images`,
-      options: {
-        maxWidth: 1080,
-      },
-    },
     {
       resolve: `gatsby-plugin-sentry`,
       options: {
@@ -84,87 +71,87 @@ module.exports = {
         enabled: (() => [`production`, `stage`].indexOf(process.env.NODE_ENV) !== -1)(),
       },
     },
-    {
-      resolve: `gatsby-plugin-feed`,
-      options: {
-        query: `
-          {
-            site {
-              siteMetadata {
-                siteTitle
-                siteDescription
-                siteUrl
-                site_url: siteUrl
-              }
-            }
-          }
-        `,
-        feeds: [
-          {
-            serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.edges.map((edge) => {
-                return Object.assign({}, edge.node.frontmatter, {
-                  description: edge.node.excerpt,
-                  date: edge.node.frontmatter.date,
-                  url: site.siteMetadata.siteUrl + edge.node.fields.slug,
-                  guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
-                  custom_elements: [{ 'content:encoded': edge.node.html }],
-                })
-              })
-            },
-            query: `
-              {
-                allMarkdownRemark(
-                  sort: { order: DESC, fields: [frontmatter___date] },
-                ) {
-                  edges {
-                    node {
-                      excerpt
-                      html
-                      fields { slug }
-                      frontmatter {
-                        title
-                        date
-                      }
-                    }
-                  }
-                }
-              }
-            `,
-            output: '/feed.xml',
-            title: `RSS feed for ${siteTitle}`,
-          },
-        ],
-      },
-    },
-    {
-      resolve: `gatsby-plugin-sitemap`,
-      options: {
-        output: `/sitemap.xml`,
-        exclude: [],
-      },
-    },
-    {
-      resolve: `gatsby-plugin-lunr`,
-      options: {
-        languages: [
-          {
-            name: 'en',
-          },
-        ],
-        fields: [
-          { name: 'title', store: true, attributes: { boost: 20 } },
-          { name: 'content' },
-          { name: 'url', store: true },
-        ],
-        resolvers: {
-          MarkdownRemark: {
-            title: (node) => node.frontmatter.title,
-            content: (node) => node.rawMarkdownBody,
-            url: (node) => node.fields.slug,
-          },
-        },
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-feed`,
+    //   options: {
+    //     query: `
+    //       {
+    //         site {
+    //           siteMetadata {
+    //             siteTitle
+    //             siteDescription
+    //             siteUrl
+    //             site_url: siteUrl
+    //           }
+    //         }
+    //       }
+    //     `,
+    //     feeds: [
+    //       {
+    //         serialize: ({ query: { site, allMarkdownRemark } }) => {
+    //           return allMarkdownRemark.edges.map((edge) => {
+    //             return Object.assign({}, edge.node.frontmatter, {
+    //               description: edge.node.excerpt,
+    //               date: edge.node.frontmatter.date,
+    //               url: site.siteMetadata.siteUrl + edge.node.fields.slug,
+    //               guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
+    //               custom_elements: [{ 'content:encoded': edge.node.html }],
+    //             })
+    //           })
+    //         },
+    //         query: `
+    //           {
+    //             allMarkdownRemark(
+    //               sort: { order: DESC, fields: [frontmatter___date] },
+    //             ) {
+    //               edges {
+    //                 node {
+    //                   excerpt
+    //                   html
+    //                   fields { slug }
+    //                   frontmatter {
+    //                     title
+    //                     date
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         `,
+    //         output: '/feed.xml',
+    //         title: `RSS feed for ${siteTitle}`,
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   resolve: `gatsby-plugin-sitemap`,
+    //   options: {
+    //     output: `/sitemap.xml`,
+    //     exclude: [],
+    //   },
+    // },
+    // {
+    //   resolve: `gatsby-plugin-lunr`,
+    //   options: {
+    //     languages: [
+    //       {
+    //         name: 'en',
+    //       },
+    //     ],
+    //     fields: [
+    //       { name: 'title', store: true, attributes: { boost: 20 } },
+    //       { name: 'content' },
+    //       { name: 'url', store: true },
+    //     ],
+    //     resolvers: {
+    //       MarkdownRemark: {
+    //         title: (node) => node.frontmatter.title,
+    //         content: (node) => node.rawMarkdownBody,
+    //         url: (node) => node.fields.slug,
+    //       },
+    //     },
+    //   },
+    // },
   ],
 }

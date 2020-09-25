@@ -106,38 +106,6 @@ const Layout: React.SFC<ILayoutProps> = ({
             siteUrl
           }
         }
-        primaryNav: allJavascriptFrontmatter(
-          filter: { frontmatter: { MainNavOrder: { gt: 0 } } }
-          sort: { fields: frontmatter___MainNavOrder, order: ASC }
-        ) {
-          edges {
-            node {
-              frontmatter {
-                path
-                MainNavOrder
-                secondaryNavMenu
-                secondaryNavOrder
-                title
-              }
-            }
-          }
-        }
-        secondaryNav: allJavascriptFrontmatter(
-          filter: { frontmatter: { secondaryNavOrder: { gt: 0 } } }
-          sort: { fields: frontmatter___secondaryNavOrder, order: ASC }
-        ) {
-          edges {
-            node {
-              frontmatter {
-                path
-                MainNavOrder
-                secondaryNavMenu
-                secondaryNavOrder
-                title
-              }
-            }
-          }
-        }
       }
     `}
     render={(data: IStaticQueryProps) => {
@@ -176,15 +144,11 @@ const Layout: React.SFC<ILayoutProps> = ({
           <AccessibilityMainContentSkipLink href="#main">
             Skip to main content
           </AccessibilityMainContentSkipLink>
-          <Header siteTitle={data.site.siteMetadata.siteTitle} primaryNav={data.primaryNav} />
+          <Header siteTitle={data.site.siteMetadata.siteTitle} />
           <main id="main" role="main">
             {children}
           </main>
-          <Footer
-            siteTitle={data.site.siteMetadata.siteTitle}
-            primaryNav={data.primaryNav}
-            secondaryNav={data.secondaryNav}
-          />
+          <Footer siteTitle={data.site.siteMetadata.siteTitle} />
         </ErrorBoundary>
       )
     }}

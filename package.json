@@ -48,6 +48,7 @@
     "gatsby-plugin-twitter": "^2.3.1",
     "gatsby-plugin-webpack-size": "^1.0.0",
     "gatsby-source-filesystem": "^2.3.3",
+    "gatsby-source-graphql": "^2.7.4",
     "gatsby-transformer-javascript-frontmatter": "^2.3.2",
     "gatsby-transformer-json": "^2.4.2",
     "gatsby-transformer-remark": "^2.8.8",
@@ -58,7 +59,8 @@
     "react-dom": "^16.13.1",
     "react-form-with-constraints": "^0.15.0",
     "react-helmet": "^6.0.0",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "webiny-richtext-serializer": "^1.0.1"
   },
   "devDependencies": {
     "@testing-library/cypress": "^6.0.0",
