@@ -1,12 +1,10 @@
 const path = require(`path`)
 const _ = require(`lodash`)
 const { paginate } = require(`gatsby-awesome-pagination`)
-// const { useRichTextSerialiser } = require(webiny-richtext-serializer')
-
-const { createFilePath } = require(`gatsby-source-filesystem`)
+const { documentToHtmlString } = require('@contentful/rich-text-html-renderer')
 
 exports.createPages = ({ graphql, actions }) => {
-  const { createPage } = actions
+  const { createPage, createNodeField } = actions
 
   const blogPostTemplate = path.resolve(`./src/components/Templates/Post.tsx`)
   const categoryTemplate = path.resolve(`./src/components/Templates/Category.tsx`)
@@ -45,11 +43,6 @@ exports.createPages = ({ graphql, actions }) => {
     if (result.errors) {
       throw result.errors
     }
-    // const stuff = [
-    //   ...result.data.webinyHeadlessCms.listPosts.data,
-    //   ...result.data.webinyHeadlessCms.listEpisodes.data,
-    //   ...result.data.webinyHeadlessCms.listPages.data,
-    // ]
 
     const posts = result.data.webinyHeadlessCms.listPosts.data
 
@@ -65,6 +58,12 @@ exports.createPages = ({ graphql, actions }) => {
           next,
         },
       })
+      console.log(post)
+      // createNodeField({
+      //   name: `bodyHtml`,
+      //   node: post,
+      //   value: documentToHtmlString(post.body),
+      // })
     })
     const episodes = result.data.webinyHeadlessCms.listEpisodes.data
 
