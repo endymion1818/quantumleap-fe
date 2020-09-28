@@ -4,7 +4,7 @@ const { paginate } = require(`gatsby-awesome-pagination`)
 const { documentToHtmlString } = require('@contentful/rich-text-html-renderer')
 
 exports.createPages = ({ graphql, actions }) => {
-  const { createPage, createNode } = actions
+  const { createPage, createNodeField } = actions
 
   const blogPostTemplate = path.resolve(`./src/components/Templates/Post.tsx`)
   const categoryTemplate = path.resolve(`./src/components/Templates/Category.tsx`)
@@ -61,7 +61,8 @@ exports.createPages = ({ graphql, actions }) => {
           next,
         },
       })
-      createNode({
+      createNodeField({
+        id: `${post.id}-bodyHtml`,
         name: `bodyHtml`,
         node: post,
         value: documentToHtmlString(post.body),
