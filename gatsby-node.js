@@ -4,7 +4,7 @@ const { paginate } = require(`gatsby-awesome-pagination`)
 const { documentToHtmlString } = require('@contentful/rich-text-html-renderer')
 
 exports.createPages = ({ graphql, actions }) => {
-  const { createPage, createNodeField } = actions
+  const { createPage, createNode } = actions
 
   const blogPostTemplate = path.resolve(`./src/components/Templates/Post.tsx`)
   const categoryTemplate = path.resolve(`./src/components/Templates/Category.tsx`)
@@ -18,6 +18,7 @@ exports.createPages = ({ graphql, actions }) => {
             data {
               id
               slug
+              body
             }
           }
         }
@@ -26,6 +27,7 @@ exports.createPages = ({ graphql, actions }) => {
             data {
               id
               slug
+              body
             }
           }
         }
@@ -34,6 +36,7 @@ exports.createPages = ({ graphql, actions }) => {
             data {
               id
               slug
+              body
             }
           }
         }
@@ -58,12 +61,11 @@ exports.createPages = ({ graphql, actions }) => {
           next,
         },
       })
-      console.log(post)
-      // createNodeField({
-      //   name: `bodyHtml`,
-      //   node: post,
-      //   value: documentToHtmlString(post.body),
-      // })
+      createNode({
+        name: `bodyHtml`,
+        node: post,
+        value: documentToHtmlString(post.body),
+      })
     })
     const episodes = result.data.webinyHeadlessCms.listEpisodes.data
 
@@ -128,7 +130,6 @@ exports.createPages = ({ graphql, actions }) => {
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
-  // console.log(node)
 
   // if (node.internal.type === `MarkdownRemark`) {
   //   const slug = createFilePath({ node, getNode, basePath: `pages` })
